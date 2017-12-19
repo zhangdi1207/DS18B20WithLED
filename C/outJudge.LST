@@ -1,0 +1,50 @@
+C51 COMPILER V8.06   OUTJUDGE                                                              12/12/2017 23:00:33 PAGE 1   
+
+
+C51 COMPILER V8.06, COMPILATION OF MODULE OUTJUDGE
+OBJECT MODULE PLACED IN outJudge.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE outJudge.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"head.h"
+   2          
+   3          void outSet()
+   4          {
+   5   1              uchar i;
+   6   1              if(OUT==0)
+   7   1              {
+   8   2                      for(i=0;i<10;i++)
+   9   2                      {
+  10   3                              if(historyTemp[i]>lowTemp)
+  11   3                                      break;
+  12   3      
+  13   3                      }
+  14   2                      if(i ==10)
+  15   2                              OUT=1;
+  16   2              }
+  17   1              if(OUT==1)
+  18   1              {
+  19   2                      for(i=0;i<10;i++)
+  20   2                      {
+  21   3                              if(historyTemp[i]<highTemp)
+  22   3                                      break;
+  23   3                      }
+  24   2                      if(i==10)
+  25   2                              OUT=0;
+  26   2              }
+  27   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     73    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

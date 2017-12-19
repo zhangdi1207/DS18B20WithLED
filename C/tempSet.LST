@@ -1,0 +1,145 @@
+C51 COMPILER V8.06   TEMPSET                                                               12/12/2017 23:00:34 PAGE 1   
+
+
+C51 COMPILER V8.06, COMPILATION OF MODULE TEMPSET
+OBJECT MODULE PLACED IN tempSet.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE tempSet.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"head.h"
+   2          
+   3          
+   4          
+   5          uchar IapReadByte()
+   6          {
+   7   1              uchar addr=IAP_ADDRESS;
+   8   1          uchar dat;                       //数据缓冲区
+   9   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  10   1          IAP_CMD = CMD_READ;             //设置IAP命令
+  11   1          IAP_ADDRL = addr;               //设置IAP低地址
+  12   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  13   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  14   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  15   1          _nop_();                        //等待ISP/IAP/EEPROM操作完成
+  16   1          dat = IAP_DATA;                 //读ISP/IAP/EEPROM数据
+  17   1      /*   IapIdle();                                            /*加上这行后EEPROM操作无效*/
+  18   1          return dat;                     //返回
+  19   1      }
+  20          /*----------------------------
+  21          写一字节数据到ISP/IAP/EEPROM区域
+  22          addr:要写入的地址
+  23          dat:要写入的数据
+  24          ----------------------------*/
+  25          void IapProgramByte(uchar dat)
+  26          {
+  27   1              uchar addr=IAP_ADDRESS;
+  28   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  29   1          IAP_CMD = CMD_PROGRAM;          //设置IAP命令
+  30   1          IAP_ADDRL = addr;               //设置IAP低地址
+  31   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  32   1          IAP_DATA = dat;                 //写ISP/IAP/EEPROM数据
+  33   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  34   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  35   1          _nop_();                        //等待ISP/IAP/EEPROM操作完成
+  36   1      
+  37   1      /*   IapIdle();                                            /*加上这行后EEPROM操作无效*/
+  38   1      }
+  39          /*----------------------------
+  40          扇区擦除 某一地址addr的数据
+  41          ----------------------------*/
+  42          void IapEraseSector()
+  43          {
+  44   1              uchar addr=IAP_ADDRESS;
+  45   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  46   1          IAP_CMD = CMD_ERASE;            //设置IAP命令
+  47   1          IAP_ADDRL = addr;               //设置IAP低地址
+  48   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  49   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  50   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  51   1          _nop_();                        //等待ISP/IAP/EEPROM操作完成
+  52   1                                                                      
+  53   1      /*    IapIdle();                                        /*加上这行后EEPROM操作无效*/
+  54   1      }
+  55          
+C51 COMPILER V8.06   TEMPSET                                                               12/12/2017 23:00:34 PAGE 2   
+
+  56          void eepromInit()
+  57          {
+  58   1              uchar addr=IAP_ADDRESS;
+  59   1              uchar i;
+  60   1              lowTemp=IapReadByte();
+  61   1              highTemp=lowTemp>>4;
+  62   1              lowTemp = lowTemp&0x0f;
+  63   1              if(highTemp<=lowTemp)
+  64   1              {
+  65   2                      highTemp=10;
+  66   2                      lowTemp=5;
+  67   2                      IapEraseSector();
+  68   2                      IapProgramByte(0xa5);
+  69   2              }
+  70   1              for(i=0;i<10;i++)
+  71   1              {
+  72   2                      historyTemp[i]=(lowTemp+highTemp)/2;
+  73   2              }
+  74   1      }
+  75          
+  76          void keyBoardTest()
+  77          {
+  78   1              uchar twoTemp;
+  79   1              DQ=1;
+  80   1              HSET=1;
+  81   1              DelayNms(20);
+  82   1              if(DQ==0)
+  83   1              {
+  84   2                      DelayNms(20);
+  85   2                      if(DQ==0)
+  86   2                      {
+  87   3                              ledShow(lowTemp);
+  88   3                              DelayNms(800);
+  89   3                      }
+  90   2                      while(DQ==0)
+  91   2                      {
+  92   3                              lowTemp--;
+  93   3                              ledShow(lowTemp);
+  94   3                              if(lowTemp<0)
+  95   3                                      lowTemp=15;
+  96   3                              DelayNms(400);
+  97   3                      }
+  98   2              }
+  99   1              if(HSET==0)
+ 100   1              {
+ 101   2                      DelayNms(20);
+ 102   2                      if(HSET==0)
+ 103   2                      {
+ 104   3                              ledShow(highTemp);
+ 105   3                              DelayNms(800);
+ 106   3                      }
+ 107   2                      while(HSET==0)
+ 108   2                      {
+ 109   3                              highTemp++;
+ 110   3                              ledShow(highTemp);
+ 111   3                              if(highTemp>15)
+ 112   3                                      highTemp=0;
+ 113   3                              DelayNms(500);
+ 114   3                      }
+ 115   2              }
+ 116   1              twoTemp=highTemp*16+lowTemp;
+ 117   1              IapProgramByte(twoTemp);
+C51 COMPILER V8.06   TEMPSET                                                               12/12/2017 23:00:34 PAGE 3   
+
+ 118   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    259    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,210 @@
+BL51 BANKED LINKER/LOCATER V6.05                                                        12/10/2017  10:07:27  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.05, INVOKED BY:
+D:\PROGRAM FILES\KEIL\C51\BIN\BL51.EXE LED.obj, main.obj, delay.obj TO DS18B20 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  LED.obj (LED)
+  main.obj (MAIN)
+  delay.obj (DELAY)
+  D:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C?COPY)
+
+
+LINK MAP OF MODULE:  DS18B20 (LED)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0012H     UNIT         _DATA_GROUP_
+            IDATA   001AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00F6H     UNIT         ?C?LIB_CODE
+            CODE    00F9H     0039H     UNIT         ?PR?_LEDSHOW?LED
+            CODE    0132H     001EH     UNIT         ?PR?MAIN?MAIN
+            CODE    0150H     0014H     UNIT         ?PR?_DELAYXMS?DELAY
+            CODE    0164H     0010H     UNIT         ?CO?LED
+            CODE    0174H     000FH     UNIT         ?PR?_DELAYXUS?DELAY
+            CODE    0183H     000CH     UNIT         ?C_C51STARTUP
+            CODE    018FH     0009H     UNIT         ?PR?DELAY1MS?DELAY
+
+
+
+OVERLAY MAP OF MODULE:   DS18B20 (LED)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                  0008H    0001H
+  +--> ?PR?_DELAYXMS?DELAY
+  +--> ?PR?_LEDSHOW?LED
+
+?PR?_DELAYXMS?DELAY            -----    -----
+  +--> ?PR?DELAY1MS?DELAY
+
+?PR?_LEDSHOW?LED               0009H    0011H
+  +--> ?CO?LED
+
+BL51 BANKED LINKER/LOCATER V6.05                                                      12/10/2017  10:07:27  PAGE 2
+
+
+
+
+SYMBOL TABLE OF MODULE:  DS18B20 (LED)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        LED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0164H         SYMBOL        _?ix1000
+  B:00B0H.2       PUBLIC        sCLK
+  B:00B0H.0       PUBLIC        LED
+  C:00F9H         PUBLIC        _ledShow
+  B:00B0H.1       PUBLIC        CLK
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _LEDSHOW
+  D:0009H         SYMBOL        n
+  -------         DO            
+  D:000AH         SYMBOL        ledCode
+  D:0006H         SYMBOL        i
+  D:0007H         SYMBOL        dat
+  -------         ENDDO         
+  C:00F9H         LINE#         2
+  C:00FBH         LINE#         3
+  C:00FBH         LINE#         4
+  C:010EH         LINE#         6
+  C:0111H         LINE#         7
+  C:0118H         LINE#         8
+  C:011AH         LINE#         9
+  C:011CH         LINE#         10
+  C:011CH         LINE#         11
+  C:011EH         LINE#         12
+  C:0122H         LINE#         13
+  C:0126H         LINE#         14
+  C:0128H         LINE#         15
+  C:012CH         LINE#         16
+  C:012EH         LINE#         17
+  C:012FH         LINE#         18
+  C:0131H         LINE#         19
+  -------         ENDPROC       _LEDSHOW
+  -------         ENDMOD        LED
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0132H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+BL51 BANKED LINKER/LOCATER V6.05                                                      12/10/2017  10:07:27  PAGE 3
+
+
+  D:0088H         PUBLIC        TCON
+  B:00B0H.0       PUBLIC        LED
+  D:00C8H         PUBLIC        T2CON
+  B:00B0H.4       PUBLIC        OUT
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:0132H         LINE#         3
+  C:0132H         LINE#         4
+  C:0132H         LINE#         6
+  C:0135H         LINE#         7
+  C:0137H         LINE#         8
+  C:0139H         LINE#         9
+  C:0140H         LINE#         10
+  C:0140H         LINE#         11
+  C:0140H         LINE#         12
+  C:0145H         LINE#         13
+  C:0147H         LINE#         14
+  C:014EH         LINE#         15
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  C:018FH         PUBLIC        Delay1ms
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0150H         PUBLIC        _DelayXms
+  C:0174H         PUBLIC        _DelayXus
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAYXUS
+  D:0006H         SYMBOL        n
+  C:0174H         LINE#         3
+  C:0174H         LINE#         4
+  C:0174H         LINE#         5
+  C:017EH         LINE#         6
+  C:017EH         LINE#         7
+  C:017FH         LINE#         8
+  C:0180H         LINE#         9
+  C:0182H         LINE#         10
+  -------         ENDPROC       _DELAYXUS
+  -------         PROC          DELAY1MS
+  -------         DO            
+  D:0007H         SYMBOL        i
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:018FH         LINE#         12
+  C:018FH         LINE#         13
+  C:018FH         LINE#         16
+  C:0191H         LINE#         17
+BL51 BANKED LINKER/LOCATER V6.05                                                      12/10/2017  10:07:27  PAGE 4
+
+
+  C:0193H         LINE#         19
+  C:0193H         LINE#         20
+  C:0195H         LINE#         21
+  C:0197H         LINE#         22
+  -------         ENDPROC       DELAY1MS
+  -------         PROC          _DELAYXMS
+  D:0004H         SYMBOL        n
+  C:0150H         LINE#         25
+  C:0154H         LINE#         26
+  C:0154H         LINE#         27
+  C:015EH         LINE#         28
+  C:015EH         LINE#         29
+  C:0161H         LINE#         30
+  C:0163H         LINE#         31
+  -------         ENDPROC       _DELAYXMS
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        ?C?COPY
+  C:00D3H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAYXUS?DELAY
+
+Program Size: data=27.0 xdata=0 code=408
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

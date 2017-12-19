@@ -1,0 +1,8 @@
+"delay.obj",
+"LED.obj",
+"18B20.obj",
+"main.obj",
+"outJudge.obj",
+"tempSet.obj" 
+TO "171210" 
+RAMSIZE(256) 
