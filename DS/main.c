@@ -1,13 +1,13 @@
 #include "head.h"
+//STC15F104W
 
-uchar lowTemp=5;
-uchar highTemp=10;
 int historyTemp[]={6,6,6,6,6,6,6,6,6,6};
 
 //*
 void main()
 {
 	uchar i,j;
+	WDT_CONTR = WDT;
 	LED=0;
 	DQ = 1;
 	OUT = 0; 
@@ -15,6 +15,7 @@ void main()
 	//CLK_DIV=CLK_DIV|0x07;
 	while(1)
 	{
+	    WDT_CONTR = WDT;
 		i=i%10;
 		historyTemp[i]=readOneTemp();
 

@@ -1,0 +1,82 @@
+C51 COMPILER V8.06   MAIN                                                                  12/15/2017 18:54:55 PAGE 1   
+
+
+C51 COMPILER V8.06, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "head.h"
+   2          //STC15F104W
+   3          
+   4          int historyTemp[]={6,6,6,6,6,6,6,6,6,6};
+   5          
+   6          //*
+   7          void main()
+   8          {
+   9   1              uchar i,j;
+  10   1              WDT_CONTR = WDT;
+  11   1              LED=0;
+  12   1              DQ = 1;
+  13   1              OUT = 0; 
+  14   1              eepromInit();
+  15   1              //CLK_DIV=CLK_DIV|0x07;
+  16   1              while(1)
+  17   1              {
+  18   2                  WDT_CONTR = WDT;
+  19   2                      i=i%10;
+  20   2                      historyTemp[i]=readOneTemp();
+  21   2      
+  22   2                      ledShow(historyTemp[i]);
+  23   2                      for(j=0;j<10;j++)
+  24   2                              keyBoardTest();
+  25   2                      outSet();
+  26   2                         
+  27   2                      i++;
+  28   2                      
+  29   2                      DelayNms(500); 
+  30   2      
+  31   2              }
+  32   1      }
+  33          //*/
+  34          
+  35          /*
+  36          void main()
+  37          {
+  38                  uint i=10,j,k=10;
+  39                  uchar dat=0x44;
+  40                  while(1)
+  41                  {
+  42                                  DS18B20_Reset(  );
+  43                  DS18B20_WriteByte(0xCC);
+  44                  DS18B20_WriteByte(0x44);   //开始转换命令
+  45              while (!DQ);                    //等待转换完成
+  46              DS18B20_Reset();                //设备复位
+  47              DS18B20_WriteByte(0xCC);        //跳过ROM命令
+  48              DS18B20_WriteByte(0xBE);
+  49                  dat=DS18B20_ReadByte();
+  50                  dat>>=4;
+  51                  ledShow(dat);
+  52                  DelayNms(500);
+  53                  //ledShow(1);
+  54                  //DelayNms(500);
+  55                  }
+C51 COMPILER V8.06   MAIN                                                                  12/15/2017 18:54:55 PAGE 2   
+
+  56          }
+  57          //*/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     83    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     20       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

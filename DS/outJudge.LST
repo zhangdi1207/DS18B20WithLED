@@ -1,4 +1,4 @@
-C51 COMPILER V8.06   OUTJUDGE                                                              12/12/2017 23:00:33 PAGE 1   
+C51 COMPILER V8.06   OUTJUDGE                                                              12/15/2017 18:54:55 PAGE 1   
 
 
 C51 COMPILER V8.06, COMPILATION OF MODULE OUTJUDGE
@@ -37,7 +37,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     73    ----
+   CODE SIZE        =     77    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

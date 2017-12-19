@@ -1,0 +1,181 @@
+C51 COMPILER V8.06   TEMPSET                                                               12/15/2017 18:54:56 PAGE 1   
+
+
+C51 COMPILER V8.06, COMPILATION OF MODULE TEMPSET
+OBJECT MODULE PLACED IN tempSet.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE tempSet.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"head.h"
+   2          
+   3          int lowTemp=5;
+   4          int highTemp=10;
+   5          
+   6          void IapIdle()
+   7          {
+   8   1              IAP_CONTR = 0;         //使能IAP
+   9   1          IAP_CMD = 0; 
+  10   1              IAP_TRIG = 0;            //设置IAP命令
+  11   1          IAP_ADDRH = 0x80;          //设置IAP高地址
+  12   1              IAP_ADDRL = 0;               //设置IAP低地址
+  13   1      }
+  14          
+  15          
+  16          uchar IapReadByte(uint addr)
+  17          {
+  18   1          uchar dat;                       //数据缓冲区
+  19   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  20   1          IAP_CMD = CMD_READ;             //设置IAP命令
+  21   1          IAP_ADDRL = addr;               //设置IAP低地址
+  22   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  23   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  24   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  25   1          DelayXus(40);                        //等待ISP/IAP/EEPROM操作完成
+  26   1          dat = IAP_DATA;                 //读ISP/IAP/EEPROM数据
+  27   1          IapIdle();                                            /*加上这行后EEPROM操作无效*/
+  28   1          return dat;                     //返回
+  29   1      }
+  30          /*----------------------------
+  31          写一字节数据到ISP/IAP/EEPROM区域
+  32          addr:要写入的地址
+  33          dat:要写入的数据
+  34          ----------------------------*/
+  35          void IapProgramByte(uint addr,uchar dat)
+  36          {
+  37   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  38   1          IAP_CMD = CMD_PROGRAM;          //设置IAP命令
+  39   1          IAP_ADDRL = addr;               //设置IAP低地址
+  40   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  41   1          IAP_DATA = dat;                 //写ISP/IAP/EEPROM数据
+  42   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  43   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  44   1          DelayXus(40);                        //等待ISP/IAP/EEPROM操作完成
+  45   1      
+  46   1          IapIdle();                                            /*加上这行后EEPROM操作无效*/
+  47   1      }
+  48          /*----------------------------
+  49          扇区擦除 某一地址addr的数据
+  50          ----------------------------*/
+  51          void IapEraseSector(uint addr)
+  52          {
+  53   1          IAP_CONTR = ENABLE_IAP;         //使能IAP
+  54   1          IAP_CMD = CMD_ERASE;            //设置IAP命令
+  55   1          IAP_ADDRL = addr;               //设置IAP低地址
+C51 COMPILER V8.06   TEMPSET                                                               12/15/2017 18:54:56 PAGE 2   
+
+  56   1          IAP_ADDRH = addr >> 8;          //设置IAP高地址
+  57   1          IAP_TRIG = 0x5a;                //写触发命令(0x5a)
+  58   1          IAP_TRIG = 0xa5;                //写触发命令(0xa5)
+  59   1          DelayXus(40);                        //等待ISP/IAP/EEPROM操作完成
+  60   1                                                                      
+  61   1          IapIdle();                                        /*加上这行后EEPROM操作无效*/
+  62   1      }
+  63          
+  64          void eepromInit()
+  65          {
+  66   1              uchar i;
+  67   1              lowTemp=IapReadByte(LOW_ADDRESS);
+  68   1              highTemp=IapReadByte(HIGH_ADDRESS);
+  69   1              if(highTemp<=lowTemp)
+  70   1              {
+  71   2                      highTemp=10;
+  72   2                      lowTemp=5;
+  73   2                      IapEraseSector(LOW_ADDRESS);
+  74   2                      //IapEraseSector(HIGH_ADDRESS);
+  75   2                      IapProgramByte(LOW_ADDRESS,lowTemp);
+  76   2                      IapProgramByte(HIGH_ADDRESS,highTemp);
+  77   2              }
+  78   1              for(i=0;i<10;i++)
+  79   1              {
+  80   2                      historyTemp[i]=(lowTemp+highTemp)/2;
+  81   2              }
+  82   1      }
+  83          
+  84          void keyBoardTest()
+  85          {
+  86   1              int oldLow,oldHigh;
+  87   1              uchar changeFlag=0;
+  88   1              oldLow=lowTemp;
+  89   1              oldHigh=highTemp;
+  90   1      
+  91   1              HSET=0;
+  92   1              DelayNms(20);
+  93   1              if(HSET==1)
+  94   1              {
+  95   2                      HSET=0;
+  96   2                      DelayNms(20);
+  97   2                      if(HSET==1)
+  98   2                      {
+  99   3                              HSET=0;
+ 100   3                              ledShow(lowTemp);
+ 101   3                              DelayNms(1500);
+ 102   3                      }
+ 103   2                      while(HSET==1)
+ 104   2                      {
+ 105   3                              HSET=0;
+ 106   3                              lowTemp--;
+ 107   3                              ledShow(lowTemp);
+ 108   3                              if(lowTemp<0)
+ 109   3                                      lowTemp=29;
+ 110   3                              DelayNms(800);
+ 111   3                              changeFlag=1;
+ 112   3                      }
+ 113   2              }
+ 114   1              HSET=1;
+ 115   1              DelayNms(20);
+ 116   1              if(HSET==0)
+ 117   1              {
+C51 COMPILER V8.06   TEMPSET                                                               12/15/2017 18:54:56 PAGE 3   
+
+ 118   2                      HSET=1;
+ 119   2                      DelayNms(20);
+ 120   2                      if(HSET==0)
+ 121   2                      {       HSET=1;
+ 122   3                              ledShow(highTemp);
+ 123   3                              DelayNms(1500);
+ 124   3                      }
+ 125   2                      while(HSET==0)
+ 126   2                      {
+ 127   3                              HSET=1;
+ 128   3                              highTemp++;
+ 129   3                              ledShow(highTemp);
+ 130   3                              if(highTemp>29)
+ 131   3                                      highTemp=0;
+ 132   3                              DelayNms(800);
+ 133   3                              changeFlag=1;
+ 134   3                      }
+ 135   2              }
+ 136   1              if(changeFlag)
+ 137   1              {
+ 138   2                      changeFlag=0;
+ 139   2                      if(lowTemp != oldLow)
+ 140   2                      {
+ 141   3                              IapEraseSector(LOW_ADDRESS);
+ 142   3                              IapProgramByte(LOW_ADDRESS,lowTemp);
+ 143   3                              IapProgramByte(HIGH_ADDRESS,highTemp);
+ 144   3                      }
+ 145   2                      DelayNms(1);
+ 146   2                      if(highTemp!=oldHigh)
+ 147   2                      {
+ 148   3                              IapEraseSector(HIGH_ADDRESS);
+ 149   3                              IapProgramByte(LOW_ADDRESS,lowTemp);
+ 150   3                              IapProgramByte(HIGH_ADDRESS,highTemp);
+ 151   3                      }
+ 152   2                      DelayNms(1);
+ 153   2              }
+ 154   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    477    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

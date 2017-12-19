@@ -1,4 +1,4 @@
-C51 COMPILER V8.06   18B20                                                                 12/12/2017 23:00:33 PAGE 1   
+C51 COMPILER V8.06   18B20                                                                 12/15/2017 18:54:55 PAGE 1   
 
 
 C51 COMPILER V8.06, COMPILATION OF MODULE 18B20
@@ -62,7 +62,7 @@ line level    source
   53   2                      j=dat&0x01;
   54   2                      dat>>=1;
   55   2              DQ = 0;                     //开始时间片
-C51 COMPILER V8.06   18B20                                                                 12/12/2017 23:00:33 PAGE 2   
+C51 COMPILER V8.06   18B20                                                                 12/15/2017 18:54:55 PAGE 2   
 
   56   2              nop();                //延时等待
   57   2              DQ = j;

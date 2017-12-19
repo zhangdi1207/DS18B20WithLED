@@ -22,6 +22,7 @@ void DelayXus(uint n)                  //LCALL 6
 //*/
 void DelayNms(uint n)
 {
+	WDT_CONTR = WDT;
 	while(n--)
 	{
 		DelayXus(1000);

@@ -10,7 +10,9 @@
 #define CMD_PROGRAM 2               //IAP字节编程命令
 #define CMD_ERASE   3  
 #define ENABLE_IAP  0x82            //if SYSCLK<20MHz
-#define IAP_ADDRESS 0x0000
+#define LOW_ADDRESS 0x0000
+#define HIGH_ADDRESS 0x0001
+#define WDT			0x35			//看门狗初始化@12MHz，2.9071s
 
 sfr AUXR        =   0x8e;
 sfr IAP_DATA    =   0xC2;           //IAP数据寄存器
@@ -20,6 +22,7 @@ sfr IAP_CMD     =   0xC5;           //IAP命令寄存器
 sfr IAP_TRIG    =   0xC6;           //IAP命令触发寄存器
 sfr IAP_CONTR   =   0xC7;           //IAP控制寄存器
 sfr CLK_DIV = 0x97;					//时钟命令寄存器
+sfr WDT_CONTR = 0xc1;
 
 sbit LED = P3^0;
 sbit CLK = P3^1;
@@ -43,8 +46,8 @@ void keyBoardTest();
 
 void outSet();
 
-extern uchar lowTemp;
-extern uchar highTemp;
+extern int lowTemp;
+extern int highTemp;
 extern int historyTemp[];
 
 #endif
