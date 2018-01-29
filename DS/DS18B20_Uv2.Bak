@@ -9,6 +9,8 @@ File 1,1,<.\delay.c><delay.c> 0x0
 File 1,1,<.\LED.c><LED.c> 0x0 
 File 1,1,<.\18B20.C><18B20.C> 0x0 
 File 1,1,<.\main.c><main.c> 0x0 
+File 1,1,<.\outJudge.c><outJudge.c> 0x0 
+File 1,1,<.\tempSet.c><tempSet.c> 0x0 
 
 
 Options 1,0,0  // Target 'Ä¿±ê 1'

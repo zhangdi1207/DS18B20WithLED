@@ -43,7 +43,7 @@ Options 1,0,0  // Target 'Ä¿±ê 1'
  GenApp=1
  GenLib=0
  GenHex=1
- µ÷ÊÔ=1
+ Debug=1
  Browse=1
  LstDir (.\)
  HexSel=0
